@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Días 13</title>
+<link href="https://fonts.googleapis.com/css2?family=New+Rocker&display=swap" rel="stylesheet">
+<style>
+    body {
+        background-color: #23282b;
+        color: #6636af;
+        font-family: 'New Rocker', cursive;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        text-align: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .contenedor {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #quedan {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin: 0.5rem 0;
+    }
+    #numero {
+        font-size: clamp(15rem, 25vw, 20rem);
+        font-weight: bold;
+        line-height: 1;
+        text-shadow: 0 0 20px #6636af;
+    }
+    #texto {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin-top: 0.5rem;
+    }
+    #detalle {
+        font-size: clamp(1rem, 2vw, 1.5rem); /* 3/4 del tamaño de "Faltan" */
+        position: absolute;
+        bottom: 100px;
+        text-align: center;
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="contenedor">
+    <div id="quedan">Faltan</div>
+    <div id="numero"></div>
+    <div id="texto"></div>
+</div>
+
+<div id="detalle"></div>
+
+<script>
+function calcularProximo() {
+    const hoy = new Date();
+    let anio = hoy.getFullYear();
+    let proximo = null;
+
+    const mesesNombres = ["enero","febrero","marzo","abril","mayo","junio",
+                          "julio","agosto","septiembre","octubre","noviembre","diciembre"];
+    const diasSemana = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+
+    function buscarEnAnio(year, desdeMes = 0) {
+        for (let mes = desdeMes; mes < 12; mes++) {
+            const fecha = new Date(year, mes, 13);
+            if ((fecha.getDay() === 2 || fecha.getDay() === 5) && fecha >= hoy) {
+                return fecha;
+            }
+        }
+        return null;
+    }
+
+    proximo = buscarEnAnio(anio, hoy.getMonth());
+    if (!proximo) {
+        anio++;
+        proximo = buscarEnAnio(anio);
+    }
+
+    const diffTime = proximo - hoy;
+    const diasFaltan = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const nombreDia = diasSemana[proximo.getDay()];
+    const nombreMes = mesesNombres[proximo.getMonth()];
+
+    document.getElementById("numero").textContent = diasFaltan;
+    document.getElementById("texto").textContent = `días para el próximo ${nombreDia} 13`;
+
+    document.getElementById("detalle").textContent = 
+        `El próximo día de mala suerte es el ${nombreDia} 13 de ${nombreMes} de ${proximo.getFullYear()}`;
+    
+    return proximo;
+}
+
+// Calcular y guardar próximo
+const proximo = calcularProximo();
+
+// Toggle detalle con click
+document.body.addEventListener("click", () => {
+    const detalle = document.getElementById("detalle");
+    detalle.style.display = (detalle.style.display === "none" || detalle.style.display === "") 
+        ? "block" 
+        : "none";
+});
+</script>
+
+</body>
+</html>
