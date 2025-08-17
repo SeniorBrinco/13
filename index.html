@@ -54,7 +54,25 @@
 </style>
 </head>
 <body>
-
+<script src="three.r134.min.js"></script>
+<script src="vanta.fog.min.js"></script>
+<script>
+VANTA.FOG({
+  el: "#your-element-selector",
+  mouseControls: true,
+  touchControls: true,
+  gyroControls: false,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  highlightColor: 0x0,
+  midtoneColor: 0x404040,
+  lowlightColor: 0x3b3b3b,
+  baseColor: 0x0,
+  blurFactor: 0.55,
+  speed: 0.50,
+  zoom: 1.30
+})
+</script>
 <div class="contenedor">
     <div id="quedan">Faltan</div>
     <div id="numero"></div>
@@ -117,6 +135,7 @@ document.body.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
