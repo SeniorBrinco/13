@@ -7,10 +7,10 @@
   <meta name="description" content="Descubre cuántos días faltan para el próximo martes o viernes 13 y conoce el origen de la superstición.">
   <meta name="robots" content="index, follow">
   <meta name="google-site-verification" content="2NWTYB0U2pGDA2_I2OLeCj8g-nCuzaUzHoTcFtxYGxA" />
-<link href="https://fonts.googleapis.com/css2?family=New+Rocker&display=swap" rel="stylesheet">
-<style>
+  <link href="https://fonts.googleapis.com/css2?family=New+Rocker&display=swap" rel="stylesheet">
+  <style>
     body {
-        background-color: #23282b;
+        background-color: #140a23;
         color: #6636af;
         font-family: 'New Rocker', cursive;
         display: flex;
@@ -51,93 +51,90 @@
         text-align: center;
         display: none;
     }
-</style>
+  </style>
 </head>
 <body>
-<script src="three.r134.min.js"></script>
-<script src="vanta.fog.min.js"></script>
-<script>
-VANTA.FOG({
-  el: "#your-element-selector",
+
+  <div class="contenedor">
+      <div id="quedan">Faltan</div>
+      <div id="numero"></div>
+      <div id="texto"></div>
+  </div>
+
+  <div id="detalle"></div>
+
+  <script>
+    function calcularProximo() {
+        const hoy = new Date();
+        let anio = hoy.getFullYear();
+        let proximo = null;
+
+        const mesesNombres = ["enero","febrero","marzo","abril","mayo","junio",
+                              "julio","agosto","septiembre","octubre","noviembre","diciembre"];
+        const diasSemana = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+
+        function buscarEnAnio(year, desdeMes = 0) {
+            for (let mes = desdeMes; mes < 12; mes++) {
+                const fecha = new Date(year, mes, 13);
+                if ((fecha.getDay() === 2 || fecha.getDay() === 5) && fecha >= hoy) {
+                    return fecha;
+                }
+            }
+            return null;
+        }
+
+        proximo = buscarEnAnio(anio, hoy.getMonth());
+        if (!proximo) {
+            anio++;
+            proximo = buscarEnAnio(anio);
+        }
+
+        const diffTime = proximo - hoy;
+        const diasFaltan = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const nombreDia = diasSemana[proximo.getDay()];
+        const nombreMes = mesesNombres[proximo.getMonth()];
+
+        document.getElementById("numero").textContent = diasFaltan;
+        document.getElementById("texto").textContent = `días para el próximo ${nombreDia} 13`;
+
+        document.getElementById("detalle").textContent = 
+            `El próximo día de mala suerte es el ${nombreDia} 13 de ${nombreMes} de ${proximo.getFullYear()}`;
+        
+        return proximo;
+    }
+
+    // Calcular y guardar próximo
+    const proximo = calcularProximo();
+
+    // Toggle detalle con click
+    document.body.addEventListener("click", () => {
+        const detalle = document.getElementById("detalle");
+        detalle.style.display = (detalle.style.display === "none" || detalle.style.display === "") 
+            ? "block" 
+            : "none";
+    });
+  </script>
+
+  <!-- Librerías y Vanta.js al final -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.fog.min.js"></script>
+  <script>
+    VANTA.FOG({
+      el: "body",
   mouseControls: true,
   touchControls: true,
   gyroControls: false,
   minHeight: 200.00,
   minWidth: 200.00,
-  highlightColor: 0x0,
-  midtoneColor: 0x404040,
-  lowlightColor: 0x3b3b3b,
-  baseColor: 0x0,
+  highlightColor: 0x5b309d,
+  midtoneColor: 0x512b8c,
+  lowlightColor: 0x3d2069,
+  baseColor: 0x281546,
   blurFactor: 0.55,
-  speed: 0.50,
-  zoom: 1.30
-})
-</script>
-<div class="contenedor">
-    <div id="quedan">Raltan</div>
-    <div id="numero"></div>
-    <div id="texto"></div>
-</div>
-
-<div id="detalle"></div>
-
-<script>
-function calcularProximo() {
-    const hoy = new Date();
-    let anio = hoy.getFullYear();
-    let proximo = null;
-
-    const mesesNombres = ["enero","febrero","marzo","abril","mayo","junio",
-                          "julio","agosto","septiembre","octubre","noviembre","diciembre"];
-    const diasSemana = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
-
-    function buscarEnAnio(year, desdeMes = 0) {
-        for (let mes = desdeMes; mes < 12; mes++) {
-            const fecha = new Date(year, mes, 13);
-            if ((fecha.getDay() === 2 || fecha.getDay() === 5) && fecha >= hoy) {
-                return fecha;
-            }
-        }
-        return null;
-    }
-
-    proximo = buscarEnAnio(anio, hoy.getMonth());
-    if (!proximo) {
-        anio++;
-        proximo = buscarEnAnio(anio);
-    }
-
-    const diffTime = proximo - hoy;
-    const diasFaltan = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const nombreDia = diasSemana[proximo.getDay()];
-    const nombreMes = mesesNombres[proximo.getMonth()];
-
-    document.getElementById("numero").textContent = diasFaltan;
-    document.getElementById("texto").textContent = `días para el próximo ${nombreDia} 13`;
-
-    document.getElementById("detalle").textContent = 
-        `El próximo día de mala suerte es el ${nombreDia} 13 de ${nombreMes} de ${proximo.getFullYear()}`;
-    
-    return proximo;
-}
-
-// Calcular y guardar próximo
-const proximo = calcularProximo();
-
-// Toggle detalle con click
-document.body.addEventListener("click", () => {
-    const detalle = document.getElementById("detalle");
-    detalle.style.display = (detalle.style.display === "none" || detalle.style.display === "") 
-        ? "block" 
-        : "none";
-});
-</script>
+  speed: 2.10,
+  zoom: 1.80
+    })
+  </script>
 
 </body>
 </html>
-
-
-
-
-
-
